@@ -1,3 +1,5 @@
+'use client'
+
 import { advantages } from '@/constants';
 
 import { ExpertiseSection } from '@/views/ExpertiseSection';
@@ -13,6 +15,7 @@ import { TrustSection } from '@/views/TrustSection';
 import { QASection } from '@/views/QASection';
 import { StatisticsSection } from '@/views/StatisticsSection';
 import { AdvantagesSection } from '@/views/AdvantagesSection';
+import { GoogleAnalytics } from "nextjs-google-analytics";
 
 export default function Home() {
   return (
@@ -30,6 +33,7 @@ export default function Home() {
       <QASection />
       <ApplyFormSection />
       <ScrollToTopButton sectionIdStart={advantages} />
+      <GoogleAnalytics trackPageViews />
     </>
   );
 }
