@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Open_Sans, Inter } from 'next/font/google';
 import localFont from 'next/font/local';
 import { Toaster } from 'react-hot-toast';
+import { GoogleTagManager } from '@next/third-parties/google';
 
 import { Header } from '@/views/Header';
 import { Footer } from '@/views/Footer';
@@ -34,6 +35,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const GTM = process.env.NEXT_PUBLIC_GTM_ID;
   return (
     <html lang="en">
       <body
@@ -48,6 +50,7 @@ export default function RootLayout({
         <Toaster position="top-right" reverseOrder={true} />
         <div id="popup" />
       </body>
+      <GoogleTagManager gtmId={GTM as string} />
     </html>
   );
 }
