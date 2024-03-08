@@ -3,5 +3,6 @@
   "name": "Ім'я: ",
   "socials": "Соц. мережі: ",
   "phone": "Номер телефону: ",
-  "userQuestion": "Питання: "
+  "userQuestion": "Питання: ",
+  "utm": "Miтки UTM:"
 }

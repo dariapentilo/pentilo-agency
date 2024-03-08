@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { FieldValues, useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import useFormPersist from 'react-hook-form-persist';
+import { useSearchParams } from 'next/navigation';
 import classNames from 'classnames';
 
 import { notify, sendDataToTelegram } from '@/utils';
@@ -25,10 +26,17 @@ const { form, timerText, notifications, onLoadingMessage } = data;
 const { inputs, textarea } = form;
 const { onSuccess, onError } = notifications;
 
-export const Form: React.FC<FormProps> = ({ className = '' }) => {
+export const Form = ({ className = '' }: FormProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [popUpType, setPopUpType] = useState<PopUpType>('default');
   const [count, setCount] = useState<number>(0);
+  const paramsArr: { [key: string]: string }[] = [];
+
+  useSearchParams().forEach((value, key) => {
+    return paramsArr.push({ [key]: value });
+  });
+
+  const paramsArrString = JSON.stringify(paramsArr);
 
   const {
     register,
@@ -67,7 +75,10 @@ export const Form: React.FC<FormProps> = ({ className = '' }) => {
   const onSubmit: SubmitHandler<FieldValues> = async (formData: FormData) => {
     try {
       setIsLoading(true);
-      const status: StatusVariants = await sendDataToTelegram(formData);
+      const status: StatusVariants = await sendDataToTelegram({
+        ...formData,
+        paramsArrString,
+      });
       setPopUpType(status);
       reset();
     } catch (error) {

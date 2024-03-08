@@ -11,14 +11,16 @@ type Response = {
 export const sendDataToTelegram = async (
   formData: FieldValues,
 ): Promise<StatusVariants> => {
-  const { userName, socialLink, phoneNumber, question } = formData;
-  const { title, name, phone, socials, userQuestion } = data;
+  const { userName, socialLink, phoneNumber, question, paramsArrString } =
+    formData;
+  const { title, name, phone, socials, userQuestion, utm } = data;
 
   const messageMarkup = `<b>${title}</b>\n
   ${name}${userName}
   ${socials}${socialLink}
   ${phone}${phoneNumber}
-  ${userQuestion}${question}`;
+  ${userQuestion}${question || 'Не вказано'}
+  ${utm}${paramsArrString || 'Не знайдено'}`;
 
   try {
     const response: Response = await axios.post(`/api/telegram`, {
