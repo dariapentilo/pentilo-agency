@@ -16,7 +16,7 @@ import { Countdown } from '../ui/Countdown';
 import { Button } from '../ui/Button';
 import { Loader } from '../ui/Loader';
 
-import { FormProps, PopUpType, StatusVariants } from './types';
+import { FormProps, PopUpType, StatusVariants, UtmObject } from './types';
 import { schema } from './schema';
 
 import data from '@/data/form.json';
@@ -30,13 +30,20 @@ export const Form = ({ className = '' }: FormProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [popUpType, setPopUpType] = useState<PopUpType>('default');
   const [count, setCount] = useState<number>(0);
-  const paramsArr: { [key: string]: string }[] = [];
+
+  const utmMapping: UtmObject = {
+    utm_source: undefined,
+    utm_medium: undefined,
+    utm_term: undefined,
+    utm_content: undefined,
+    utm_campaign: undefined,
+  };
 
   useSearchParams().forEach((value, key) => {
-    return paramsArr.push({ [key]: value });
+    if (key in utmMapping) {
+      utmMapping[key] = value;
+    }
   });
-
-  const paramsArrString = JSON.stringify(paramsArr);
 
   const {
     register,
@@ -77,7 +84,7 @@ export const Form = ({ className = '' }: FormProps) => {
       setIsLoading(true);
       const status: StatusVariants = await sendDataToTelegram({
         ...formData,
-        paramsArrString,
+        ...utmMapping,
       });
       setPopUpType(status);
       reset();
